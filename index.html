@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diário de Campo — Rendimento de Reação | PIBID Química USP-RP</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Kalam:wght@400;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ======================= BARRA SUPERIOR ======================= -->
+  <header class="topo-diario" id="topoDiario" hidden>
+    <img src="logo.png" alt="Logo PIBID Química" class="logo-mini" onerror="this.classList.add('logo-fallback')">
+    <div class="topo-titulos">
+      <span class="topo-kicker">Diário de Campo</span>
+      <span class="topo-titulo">Rendimento de Reação</span>
+    </div>
+    <div class="topo-progresso" aria-hidden="true">
+      <div class="trilha-progresso">
+        <div class="preenchimento-progresso" id="barraProgresso"></div>
+      </div>
+      <span id="progressoTexto">Etapa 1 de 10</span>
+    </div>
+  </header>
+
+  <main id="palco"></main>
+
+  <!-- Carimbo de rodapé -->
+  <footer class="rodape-diario">
+    <span>PIBID Química · Escola Estadual Bairro Francisco Castilho · Elaborado por bolsistas do: Programa Institucional de Bolsas de Iniciação à Docência, Edital 10/2024. NID: Química USP.<br>Orientadora: Glaucia Maria da Silva Degrève; Supervisora: Isabella dos Santos Abrahão; Bolsistas: José Miguel Ferreira Barbosa, Sabrina Frigi Mendonça, Vinicius Gallego da Silva.
+</span>
+  </footer>
+</div>
+
+<!-- ======================= TEMPLATES DE TELAS ======================= -->
+
+<template id="tpl-capa">
+  <section class="tela tela-capa">
+    <div class="marca-dagua-logo"></div>
+    <img src="logo.png" alt="Logo PIBID Química" class="logo-capa" onerror="this.classList.add('logo-fallback-grande')">
+        <h1 class="titulo-capa">Práticas Experimentais:<br>Rendimento de Reação</h1>
+    <p class="subtitulo-capa">Registre-se como pesquisador(a) de campo antes de iniciar a expedição.</p>
+
+    <div class="cartao-cadastro">
+      <label for="inputAluno">Integrantes do grupo</label>
+      <div class="linha-cadastro">
+        <input type="text" id="inputAluno" placeholder="Digite um nome e pressione Enter" maxlength="40" autocomplete="off">
+        <button type="button" class="btn btn-secundario" id="btnAddAluno">Adicionar</button>
+      </div>
+      <div class="tags-alunos" id="tagsAlunos" aria-live="polite"></div>
+      <p class="dica-cadastro" id="dicaCadastro">Adicione ao menos um(a) integrante para liberar a expedição.</p>
+    </div>
+
+    <button class="btn btn-primario btn-expedicao" id="btnIniciarExpedicao" disabled>Iniciar Expedição →</button>
+  </section>
+</template>
+
+<template id="tpl-contexto">
+  <section class="tela tela-contexto">
+    <div class="marca-dagua-logo"></div>
+    <h2 class="titulo-etapa">Por que isso importa?</h2>
+
+    <div class="balao-fala balao-entrada" data-personagem="1">
+      <img class="avatar-personagem" src="personagens/personagem1.png" alt="Dandara" onerror="this.parentElement.classList.add('avatar-erro')">
+      <div class="conteudo-balao">
+        <span class="nome-personagem">Dandara</span>
+        <p>Bem-vindos à bancada! Vocês já ouviram que <em>"nada se perde, tudo se transforma"</em> — mas na prática, nem tudo que colocamos numa reação vira exatamente o produto que queremos. Essa diferença é o que chamamos de <strong>rendimento</strong>, e é ela que vamos investigar hoje.</p>
+      </div>
+    </div>
+
+    <p class="texto-corrido">Compreender o rendimento vai muito além de passar em uma prova de Química: trata-se de entender como a matéria e a energia são transformadas e aproveitadas na natureza, na tecnologia e no nosso dia a dia. O rendimento mede justamente essa eficiência.</p>
+
+    <h3 class="subtitulo-secao">Onde o rendimento está presente?</h3>
+    <div class="grade-cenarios">
+      <article class="cartao-cenario">
+        <span class="icone-cenario" aria-hidden="true">🍳</span>
+        <h4>Na Cozinha</h4>
+        <p>O prato pronto sempre rende menos do que a soma dos ingredientes brutos, pois parte da massa gruda nas panelas, a água evapora e aparas são descartadas.</p>
+      </article>
+      <article class="cartao-cenario">
+        <span class="icone-cenario" aria-hidden="true">🚗</span>
+        <h4>No Motor de Carro</h4>
+        <p>O veículo não aproveita todo o combustível apenas para andar: a queima da gasolina se dissipa em calor, atrito entre peças e gases expelidos.</p>
+      </article>
+      <article class="cartao-cenario">
+        <span class="icone-cenario" aria-hidden="true">🫀</span>
+        <h4>No Corpo Humano</h4>
+        <p>Nem todo alimento ingerido vira energia útil: parte dos nutrientes não é absorvida pelo intestino e outra parcela vira calor corporal.</p>
+      </article>
+      <article class="cartao-cenario">
+        <span class="icone-cenario" aria-hidden="true">🏭</span>
+        <h4>No Mundo e na Indústria</h4>
+        <p>Fábricas de remédios e plásticos obtêm menos produto final do que a matéria-prima inserida: material fica retido em filtros e reações paralelas geram resíduos.</p>
+      </article>
+    </div>
+
+    <button class="btn btn-primario" data-acao="avancar">Continuar a expedição →</button>
+  </section>
+</template>
+
+<template id="tpl-desafio-fatores">
+  <section class="tela tela-fatores">
+    <div class="marca-dagua-logo"></div>
+    <h2 class="titulo-etapa">O que afeta o rendimento?</h2>
+
+    <div class="balao-fala balao-entrada" data-personagem="2">
+      <img class="avatar-personagem" src="personagens/personagem2.png" alt="Moara" onerror="this.parentElement.classList.add('avatar-erro')">
+      <div class="conteudo-balao">
+        <span class="nome-personagem">Moara</span>
+        <p>Antes de sujar as mãos com o Material Dourado, precisamos reconhecer o terreno. Entre as 10 fichas abaixo, existem <strong>fatores reais</strong> que reduzem o rendimento de uma reação — e também pegadinhas bem elaboradas. Leiam com rigor científico e selecionem as opções que vocês consideram verdadeiras.</p>
+      </div>
+    </div>
+
+    <div class="grade-fichas" id="gradeFichas" role="group" aria-label="Fichas de fatores de rendimento"></div>
+
+    <p class="feedback-fichas" id="feedbackFichas" aria-live="polite"></p>
+    <button class="btn btn-primario" data-acao="validar-fichas" id="btnValidarFichas">Registrar Análise dos Fatores</button>
+    <button class="btn btn-primario oculto" data-acao="avancar" id="btnAvancarFichas">Continuar a expedição →</button>
+  </section>
+</template>
+
+<template id="tpl-protocolo">
+  <section class="tela tela-protocolo">
+    <div class="marca-dagua-logo"></div>
+    <h2 class="titulo-etapa">Protocolo do Material Dourado</h2>
+
+    <div class="balao-fala balao-entrada" data-personagem="4">
+      <img class="avatar-personagem" src="personagens/personagem4.png" alt="Samuel" onerror="this.parentElement.classList.add('avatar-erro')">
+      <div class="conteudo-balao">
+        <span class="nome-personagem">Samuel</span>
+        <p>Chegou a hora de ir para a bancada de verdade. Ouçam as regras com atenção antes de começar a montar a reação.</p>
+      </div>
+    </div>
+
+    <div class="cartao-protocolo">
+      <h3>Regras de bancada</h3>
+      <ul class="lista-protocolo">
+        <li><strong>Dois potes de reagentes:</strong> um pote representa o <strong>Reagente A</strong> e outro o <strong>Reagente B</strong>, ambos com peças do Material Dourado.</li>
+        <li><strong>Proporção estequiométrica:</strong> a reação segue a proporção <strong>1 A : 2 B</strong> — cada peça de A só forma produto se houver duas peças de B disponíveis para se unir a ela.</li>
+        <li><strong>Montagem física:</strong> unam os pares até não ser mais possível formar produto e contem quantas peças de produto foram formadas (rendimento teórico).</li>
+        <li><strong>Corte simulado:</strong> o professor vai recolher aleatoriamente algumas peças do produto montado, simulando uma perda real de bancada. Contem novamente o que restou (rendimento real).</li>
+      </ul>
+    </div>
+
+    <button class="btn btn-primario" data-acao="avancar">Iniciar as questões →</button>
+  </section>
+</template>
+
+<!-- Template genérico reutilizado para as Telas 5–9 (Questões 1–5) -->
+<template id="tpl-questao">
+  <section class="tela tela-questao">
+    <div class="marca-dagua-logo"></div>
+    <h2 class="titulo-etapa" id="qTitulo"></h2>
+    <p class="enunciado-questao" id="qEnunciado"></p>
+
+    <div class="cartao-anotacao">
+      <label id="qLabelResposta" for="qCaixaResposta">Registre a resposta do grupo</label>
+      <textarea id="qCaixaResposta" class="caixa-anotacao" rows="5" placeholder="Escrevam aqui o raciocínio do grupo..."></textarea>
+      <div class="linha-acoes-anotacao">
+        <span class="carimbo-registrado oculto" id="carimboRegistrado">REGISTRADO</span>
+        <button class="btn btn-primario" id="btnRegistrar" data-acao="registrar">Registrar Anotação</button>
+      </div>
+    </div>
+
+    <div class="area-personagem-quiz oculto" id="areaPersonagemQuiz">
+      <div class="balao-fala balao-entrada" id="balaoQuiz">
+        <img class="avatar-personagem" id="avatarQuiz" alt="" onerror="this.parentElement.classList.add('avatar-erro')">
+        <div class="conteudo-balao">
+          <span class="nome-personagem" id="nomeQuiz"></span>
+          <p id="falaQuiz"></p>
+        </div>
+      </div>
+
+      <!-- Pergunta 1 do Personagem -->
+      <div class="cartao-quiz" id="cartaoQuiz1">
+        <p class="pergunta-quiz" id="perguntaQuiz1"></p>
+        <div class="opcoes-quiz" id="opcoesQuiz1" role="radiogroup"></div>
+        <p class="feedback-quiz" id="feedbackQuiz1" aria-live="polite"></p>
+      </div>
+
+      <!-- Pergunta 2 do Personagem (reforço temático encadeado) -->
+      <div class="cartao-quiz oculto" id="cartaoQuiz2" style="margin-top: 14px;">
+        <p class="pergunta-quiz" id="perguntaQuiz2"></p>
+        <div class="opcoes-quiz" id="opcoesQuiz2" role="radiogroup"></div>
+        <p class="feedback-quiz" id="feedbackQuiz2" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <button class="btn btn-primario oculto" data-acao="avancar" id="btnAvancarQuestao">Continuar a expedição →</button>
+  </section>
+</template>
+
+<template id="tpl-encerramento">
+  <section class="tela tela-encerramento">
+    <div class="marca-dagua-logo"></div>
+    <h2 class="titulo-etapa">Reunião de Encerramento</h2>
+
+    <div class="balao-fala balao-coletiva balao-entrada">
+      <p><strong>Dandara, Moara, Alex e Samuel:</strong> Parabéns, pesquisadores! Vocês completaram todos os registros e análises experimentais sobre o rendimento de reações. Enquanto o professor ou bolsista vem validar o trabalho de vocês, conheçam um pouco mais sobre nossa equipe e as referências científicas reais que nos inspiram:</p>
+    </div>
+
+    <!-- CARROSSEL AUTOMÁTICO DE PERSONAGENS & INSPIRAÇÕES -->
+    <div class="carrossel-container" id="carrosselInspiracoes">
+      <div class="carrossel-slides" id="carrosselSlides"></div>
+      <div class="carrossel-indicadores" id="carrosselIndicadores"></div>
+    </div>
+
+    <div class="aviso-professor">
+      <span aria-hidden="true">🔔</span>
+      <p>Chame o professor ou o bolsista responsável para validar e arquivar o relatório.</p>
+    </div>
+
+    <button class="btn btn-primario btn-arquivar" id="btnArquivarCSV">Arquivar Relatório (CSV) ⤓</button>
+    <p class="confirmacao-csv oculto" id="confirmacaoCSV">Relatório arquivado com sucesso.</p>
+
+    <button class="btn btn-secundario" id="btnReiniciar">Iniciar nova expedição (limpar dados salvos)</button>
+  </section>
+</template>
+
+<script src="script.js"></script>
+</body>
+</html>
